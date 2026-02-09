@@ -1,15 +1,14 @@
-# env
-.env
-.env.local
-.env.*
 
-# python
+
+# data/models
+backend/data/*.csv
+backend/data/*.joblib
+backend/data/*.pkl
+backend/data/*.parquet
+
+# general
 __pycache__/
-*.joblib
-*.pkl
-
-# node
-node_modules/
-
-# OS
 .DS_Store
+node_modules/
+.env
+.env.*
