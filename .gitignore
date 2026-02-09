@@ -1,0 +1,14 @@
+# data/models
+backend/data/
+*.csv
+*.joblib
+*.pkl
+*.parquet
+
+# env
+.env
+.env.*
+# node
+node_modules/
+# python
+__pycache__/
