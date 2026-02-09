@@ -1,0 +1,58 @@
+/* Reset + Fullscreen Layout */
+html, body {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+
+  /* ✅ allow page to grow + scroll */
+  min-height: 100%;
+  height: auto;
+}
+
+#root {
+  width: 100%;
+
+  /* ✅ let app grow beyond viewport */
+  min-height: 100vh;
+  height: auto;
+}
+
+/* ✅ allow scrolling */
+body {
+  overflow-y: auto;
+  display: block;
+  background: #0b0f14;
+  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+}
+
+/* Links */
+a {
+  font-weight: 500;
+  color: #646cff;
+  text-decoration: inherit;
+}
+a:hover {
+  color: #535bf2;
+}
+
+/* Buttons (keep consistent style) */
+button {
+  border-radius: 8px;
+  border: 1px solid transparent;
+  padding: 0.5em 1em;
+  font-size: 0.9em;
+  font-weight: 600;
+  font-family: inherit;
+  background-color: #1a1a1a;
+  cursor: pointer;
+  transition: border-color 0.25s;
+}
+
+button:hover {
+  border-color: #646cff;
+}
+
+button:focus,
+button:focus-visible {
+  outline: none;
+}

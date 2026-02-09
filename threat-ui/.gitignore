@@ -1,0 +1,15 @@
+# env
+.env
+.env.local
+.env.*
+
+# python
+__pycache__/
+*.joblib
+*.pkl
+
+# node
+node_modules/
+
+# OS
+.DS_Store
