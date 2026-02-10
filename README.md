@@ -106,7 +106,7 @@ README.md
 
 ---
 
-# ✅ PHASE-WISE WORKFLOW (Phase 0 → Phase 7)
+# ✅ PHASE-WISE WORKFLOW 
 
 ---
 
