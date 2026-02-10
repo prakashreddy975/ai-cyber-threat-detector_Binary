@@ -327,9 +327,10 @@ This is why you saw:
 
 # ✅ HOW TO RUN (Local workflow)
 
-## 1) Start MySQL
-From repo root (where docker-compose.yml exists):
+
 ```bash
+## 1) Start MySQL
+### From repo root (where docker-compose.yml exists):
 docker compose up -d
 docker ps
 
