@@ -4,13 +4,13 @@ import time
 
 # ✅ 1) UPDATE THIS URL (ngrok or local)
 # NGROK EXAMPLE:
-API_URL = "https://nongenerically-prelumbar-izabella.ngrok-free.dev/predict"
+API_URL = "http://127.0.0.1:8000/predict"
 
 # LOCAL EXAMPLE:
 # API_URL = "http://127.0.0.1:8000/predict"
 
 # ✅ 2) PATH TO YOUR TEST DATA (local path on Mac)
-DATA_PATH = "backend/data/raw/UNSW_NB15_testing-set.csv"
+DATA_PATH = "/Users/prakashreddypasham/Desktop/PRAKASH/SELF_PROJECTS/Binary_AI_CYBER_DETECTOR/backend/data/raw/UNSW_NB15_testing-set.csv"
 
 # ✅ 3) Columns to drop (labels + metadata). Edit if your CSV differs.
 DROP_COLS = ["id", "label", "attack_cat", "stime", "ltime"]

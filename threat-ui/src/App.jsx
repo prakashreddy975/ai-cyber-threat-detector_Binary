@@ -82,6 +82,12 @@ export default function App() {
   const [schemaOpen, setSchemaOpen] = useState(false);
   const [expectedCols, setExpectedCols] = useState(null);
 
+  const [copilotQ, setCopilotQ] = useState("");
+  const [copilotA, setCopilotA] = useState("");
+  const [copilotSources, setCopilotSources] = useState([]);
+  const [copilotLoading, setCopilotLoading] = useState(false);
+
+
   // ---- Quick Predict ----
   const [formJson, setFormJson] = useState(`{
   "features": {
@@ -208,18 +214,32 @@ export default function App() {
   // Load alerts when drawer open + refresh every 3s while open
   // ----------------------------
   useEffect(() => {
-  let alive = true;
-
-  async function loadAlerts() {
-    const r = await safeFetchJson(`${API_BASE}/alerts?limit=50`);
-    console.log("ALERTS:", r);
-
-    if (!alive) return;
-    if (r.json?.alerts) setAlerts(r.json.alerts);
-  }
-
-  loadAlerts();
-  }, [API_BASE]);
+    if (!alertsOpen) return; // ⛔ don’t fetch if drawer closed
+  
+    let alive = true;
+  
+    async function loadAlerts() {
+      try {
+        const r = await safeFetchJson(`${API_BASE}/alerts?limit=50`);
+        console.log("ALERTS:", r);
+  
+        if (!alive) return;
+  
+        if (r.json?.alerts) {
+          setAlerts(r.json.alerts);
+        }
+      } catch (e) {
+        console.error("Failed to load alerts:", e);
+      }
+    }
+  
+    loadAlerts();
+  
+    return () => {
+      alive = false;
+    };
+  }, [API_BASE, alertsOpen]); // ✅ added alertsOpen
+  
 
 
   // ----------------------------
@@ -237,6 +257,37 @@ export default function App() {
   
     loadColumns();
   }, [API_BASE]);
+
+
+  async function askCopilot() {
+    if (!copilotQ.trim()) return;
+  
+    setCopilotLoading(true);
+    setCopilotA("");
+    setCopilotSources([]);
+  
+    try {
+      const res = await fetch(`${API_BASE}/rag/query`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "ngrok-skip-browser-warning": "true",
+        },
+        body: JSON.stringify({ query: copilotQ, top_k: 4, use_llm: true }),
+      });
+  
+      const text = await res.text();
+      const json = JSON.parse(text);
+  
+      setCopilotA(json.answer || "");
+      setCopilotSources(json.sources || []);
+    } catch (e) {
+      setCopilotA("Copilot error: " + String(e));
+    } finally {
+      setCopilotLoading(false);
+    }
+  }
+  
   
   // ----------------------------
   // Quick Predict: POST /predict
@@ -443,6 +494,44 @@ export default function App() {
           </div>
         </div>
       </div>
+
+
+      {/* 7) SOC Copilot */}
+      <div className="panel">
+        <div className="panel-header">SOC Copilot (RAG)</div>
+        <div className="copilot-body">
+          <div className="copilot-row">
+            <input
+              className="copilot-input"
+              placeholder="Ask: what should I do for HIGH risk alerts?"
+              value={copilotQ}
+              onChange={(e) => setCopilotQ(e.target.value)}
+              onKeyDown={(e) => e.key === "Enter" && askCopilot()}
+            />
+            <button className="copilot-btn" onClick={askCopilot} disabled={copilotLoading}>
+              {copilotLoading ? "Thinking..." : "Ask"}
+            </button>
+          </div>
+
+          <div className="copilot-answer">
+            {copilotA ? copilotA : <span className="td-muted">No answer yet.</span>}
+          </div>
+
+          {copilotSources.length > 0 && (
+            <div className="copilot-sources">
+              <div className="copilot-sources-title">Sources</div>
+              {copilotSources.map((s, idx) => (
+                <details key={idx} className="copilot-source">
+                  <summary>
+                    {s.doc} #{s.chunk_index} — score {Number(s.score).toFixed(3)}
+                  </summary>
+                  <div className="copilot-source-text">{s.text}</div>
+                </details>
+              ))}
+            </div>
+          )}
+        </div>
+      </div>  
 
       {/* NEW: Quick Predict panel (/predict) */}
       <div className="panel">
