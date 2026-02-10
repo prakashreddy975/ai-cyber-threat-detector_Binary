@@ -139,6 +139,8 @@ def _ensure_loaded():
         if not ok:
             raise RuntimeError("RAG index not built. Call POST /rag/index first.")
 
+MIN_SCORE = float(os.getenv("RAG_MIN_SCORE", "0.35"))
+
 def retrieve(db: Session, query: str, top_k: int = 4) -> List[Dict[str, Any]]:
     _ensure_loaded()
     embedder = get_embedder()
@@ -147,6 +149,10 @@ def retrieve(db: Session, query: str, top_k: int = 4) -> List[Dict[str, Any]]:
     qv = np.array(qv, dtype="float32")
 
     scores, ids = _index.search(qv, top_k)
+
+    best = float(scores[0][0]) if len(scores[0]) else 0.0
+    if best < MIN_SCORE:
+        return []
 
     results = []
     for score, idx in zip(scores[0], ids[0]):
