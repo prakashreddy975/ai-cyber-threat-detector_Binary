@@ -26,8 +26,10 @@ from db.database import engine, get_db
 from db.database import Base
 from db import models, crud
 
-from rag.rag_service import rebuild_index, retrieve, answer_with_llm
+# from rag.rag_service import rebuild_index, retrieve, answer_with_llm
 
+from rag.rag_agent import rebuild_index, agent_ask, retrieve
+import os
 
 Base.metadata.create_all(bind=engine)
 
@@ -124,6 +126,12 @@ class RagQueryRequest(BaseModel):
     top_k: int = 4
     use_llm: bool = True
 
+class RagIndexResponse(BaseModel):
+    ok: bool
+
+class AgentAskRequest(BaseModel):
+    query: str
+    top_k: int = 4
 
 app.add_middleware(
     CORSMiddleware,
@@ -396,13 +404,17 @@ def get_events(limit: int = 100, db: Session = Depends(get_db)):
 # Rag End Points
 
 @app.get("/rag/status")
-def rag_status():
-    from rag.rag_service import FAISS_PATH, META_PATH
+def rag_status(db: Session = Depends(get_db)):
+    # show some DB state + index state
+    from rag.rag_agent import FAISS_PATH, META_PATH, EMBED_MODEL_NAME, LLM_MODEL_NAME, RAG_MIN_SCORE
+    chunk_count = db.query(models.RagChunk).count()
     return {
         "faiss_exists": os.path.exists(FAISS_PATH),
         "meta_exists": os.path.exists(META_PATH),
-        "embed_model": os.getenv("RAG_EMBED_MODEL", "sentence-transformers/all-MiniLM-L6-v2"),
-        "llm_model": os.getenv("RAG_LLM_MODEL", "google/flan-t5-base"),
+        "chunk_rows_in_db": int(chunk_count),
+        "embed_model": EMBED_MODEL_NAME,
+        "llm_model": LLM_MODEL_NAME,
+        "min_score": RAG_MIN_SCORE
     }
 
 @app.post("/rag/index")
@@ -410,21 +422,13 @@ def rag_index(db: Session = Depends(get_db)):
     return rebuild_index(db)
 
 @app.post("/rag/query")
-def rag_query(payload: RagQueryRequest, db: Session = Depends(get_db)):
-    sources = retrieve(db, payload.query, top_k=max(1, min(payload.top_k, 8)))
+def rag_query(payload: AgentAskRequest, db: Session = Depends(get_db)):
+    # debugging endpoint: retrieval only
+    return retrieve(db, payload.query, top_k=payload.top_k)
 
-    if payload.use_llm:
-        answer = answer_with_llm(payload.query, sources)
-    else:
-        # simple fallback: just return top sources
-        answer = "Top relevant sources retrieved. Enable use_llm=true to generate a grounded answer."
-
-    return {
-        "query": payload.query,
-        "answer": answer,
-        "sources": sources
-    }
-
+@app.post("/agent/ask")
+def agent_endpoint(payload: AgentAskRequest, db: Session = Depends(get_db)):
+    return agent_ask(db, payload.query, top_k=payload.top_k)
 
 @app.websocket("/ws")
 async def websocket_endpoint(websocket: WebSocket):

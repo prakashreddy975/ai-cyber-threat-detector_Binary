@@ -267,13 +267,13 @@ export default function App() {
     setCopilotSources([]);
   
     try {
-      const res = await fetch(`${API_BASE}/rag/query`, {
+      const res = await fetch(`${API_BASE}/agent/ask`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           "ngrok-skip-browser-warning": "true",
         },
-        body: JSON.stringify({ query: copilotQ, top_k: 4, use_llm: true }),
+        body: JSON.stringify({ query: copilotQ, top_k: 4}),
       });
   
       const text = await res.text();
