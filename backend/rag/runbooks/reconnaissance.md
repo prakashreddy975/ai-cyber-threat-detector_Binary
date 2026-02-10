@@ -1,14 +1,26 @@
-# Reconnaissance Playbook
+# Generic Network Anomalies Runbook
 
-## Indicators
-- Many destination ports or services in short time
-- Low bytes, short durations, unusual TCP flags/state patterns
+## Overview
+Generic anomalies represent traffic patterns that do not match known benign behavior but are not clearly malicious.
 
-## Actions
-- Correlate across IPs
-- Identify targeted services
-- Block if repeated and clearly malicious
+## Examples
+- Unusual protocol usage
+- Traffic at odd hours
+- Unexpected packet sizes
 
-## Evidence
-- Firewall deny logs, port scan signatures
-- Authentication failure bursts
+## ML Indicators
+- Feature distribution drift
+- Unseen categorical values
+- Deviations from learned baseline
+
+## Risk Classification
+- Usually MEDIUM
+- May escalate with repetition
+
+## Response
+- Monitor closely
+- Correlate with system changes
+- Validate business context
+
+## Model Feedback
+Generic anomalies are valuable for retraining and drift detection.

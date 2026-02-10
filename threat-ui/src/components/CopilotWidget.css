@@ -1,0 +1,219 @@
+/* Launcher button */
+.copilot-launcher {
+    position: fixed;
+    right: 18px;
+    bottom: 18px;
+    width: 54px;
+    height: 54px;
+    border-radius: 999px;
+    border: 1px solid #2c3235;
+    background: #111827;
+    color: #e5e7eb;
+    font-weight: 900;
+    font-size: 16px;
+    cursor: pointer;
+    box-shadow: 0 12px 40px rgba(0,0,0,0.45);
+    z-index: 9999;
+  }
+  .copilot-launcher:hover {
+    border-color: #5794f2;
+  }
+  
+  /* Widget container */
+  .copilot-widget {
+    position: fixed;
+    right: 18px;
+    bottom: 84px;
+    width: 380px;
+    height: 520px;
+    background: #0b0f14;
+    border: 1px solid #2c3235;
+    border-radius: 16px;
+    box-shadow: 0 18px 60px rgba(0,0,0,0.55);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    z-index: 9999;
+  }
+  
+  /* Header */
+  .copilot-header {
+    padding: 12px 12px;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    border-bottom: 1px solid #2c3235;
+    background: #0f141b;
+  }
+  .copilot-title-main {
+    font-weight: 900;
+    color: #e5e7eb;
+    letter-spacing: 0.02em;
+  }
+  .copilot-title-sub {
+    margin-top: 2px;
+    font-size: 11px;
+    color: #9ba2a5;
+    max-width: 280px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .mono {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  }
+  
+  /* Cancel button */
+  .copilot-close {
+    background: transparent;
+    border: 1px solid #2c3235;
+    color: #e5e7eb;
+    padding: 8px 10px;
+    border-radius: 10px;
+    font-weight: 800;
+    cursor: pointer;
+  }
+  .copilot-close:hover {
+    border-color: #f2495c;
+    color: #f2495c;
+  }
+  
+  /* Body chat area */
+  .copilot-body {
+    flex: 1;
+    padding: 12px;
+    overflow: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  /* Message rows */
+  .msg-row {
+    display: flex;
+  }
+  .msg-row.user {
+    justify-content: flex-end;
+  }
+  .msg-row.assistant {
+    justify-content: flex-start;
+  }
+  
+  .msg-bubble {
+    max-width: 86%;
+    border: 1px solid #2c3235;
+    border-radius: 14px;
+    padding: 10px 10px;
+    background: #0f141b;
+  }
+  .msg-bubble.user {
+    background: #101b2a;
+    border-color: #2a3a52;
+  }
+  .msg-text {
+    font-size: 13px;
+    color: #e5e7eb;
+    white-space: pre-wrap;
+    line-height: 1.35;
+  }
+  .msg-meta {
+    margin-top: 8px;
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    font-size: 10px;
+    color: #9ba2a5;
+  }
+  .msg-tag {
+    padding: 2px 6px;
+    border: 1px solid #2c3235;
+    border-radius: 999px;
+    color: #9ba2a5;
+  }
+  
+  /* Sources */
+  .sources {
+    margin-top: 10px;
+    border-top: 1px dashed #2c3235;
+    padding-top: 8px;
+  }
+  .sources summary {
+    cursor: pointer;
+    color: #9ba2a5;
+    font-size: 12px;
+    font-weight: 800;
+  }
+  .sources-list {
+    margin-top: 8px;
+    display: grid;
+    gap: 8px;
+  }
+  .source-item {
+    border: 1px solid #2c3235;
+    border-radius: 12px;
+    padding: 8px 10px;
+  }
+  .source-item summary {
+    cursor: pointer;
+    color: #9ba2a5;
+    font-size: 11px;
+  }
+  .source-text {
+    margin-top: 8px;
+    color: #e5e7eb;
+    font-size: 12px;
+    white-space: pre-wrap;
+  }
+  
+  /* Footer input */
+  .copilot-footer {
+    padding: 10px;
+    border-top: 1px solid #2c3235;
+    background: #0f141b;
+    display: flex;
+    gap: 10px;
+    align-items: flex-end;
+  }
+  .copilot-input {
+    flex: 1;
+    resize: none;
+    border-radius: 12px;
+    border: 1px solid #2c3235;
+    background: #0b0f14;
+    color: #e5e7eb;
+    padding: 10px 10px;
+    outline: none;
+    font-size: 13px;
+    line-height: 1.35;
+  }
+  .copilot-input:focus {
+    border-color: #5794f2;
+  }
+  .copilot-send {
+    padding: 10px 12px;
+    border-radius: 12px;
+    border: 1px solid #2c3235;
+    background: #111827;
+    color: #e5e7eb;
+    font-weight: 900;
+    cursor: pointer;
+  }
+  .copilot-send:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+  
+  /* Mobile responsiveness */
+  @media (max-width: 460px) {
+    .copilot-widget {
+      right: 10px;
+      left: 10px;
+      width: auto;
+      height: 70vh;
+    }
+    .copilot-launcher {
+      right: 12px;
+      bottom: 12px;
+    }
+  }
+  

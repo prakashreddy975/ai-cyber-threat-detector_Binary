@@ -139,7 +139,7 @@ def _ensure_loaded():
         if not ok:
             raise RuntimeError("RAG index not built. Call POST /rag/index first.")
 
-MIN_SCORE = float(os.getenv("RAG_MIN_SCORE", "0.35"))
+MIN_SCORE = float(os.getenv("RAG_MIN_SCORE", "0.25"))
 
 def retrieve(db: Session, query: str, top_k: int = 4) -> List[Dict[str, Any]]:
     _ensure_loaded()
